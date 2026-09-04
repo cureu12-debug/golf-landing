@@ -40,7 +40,8 @@ export default async function handler(req, res) {
   }
 
   const now = Date.now();
-  if (cache.data && now - cache.fetchedAt < CACHE_TTL_MS) {
+  const isDebug = req.query.debug === "1";
+  if (!isDebug && cache.data && now - cache.fetchedAt < CACHE_TTL_MS) {
     return res.status(200).json({ products: cache.data, cached: true });
   }
 
@@ -63,6 +64,12 @@ export default async function handler(req, res) {
     }
 
     const json = await response.json();
+
+    // 🔍 임시 디버그: 실제 응답 구조를 확인하기 위한 코드
+    if (req.query.debug === "1") {
+      return res.status(200).json(json);
+    }
+
     const rawProducts = json?.data?.productData || [];
 
     const products = rawProducts.map((p, idx) => ({
