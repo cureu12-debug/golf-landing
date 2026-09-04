@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight, History } from "lucide-react";
 
-const HEADLINE_HOOK = "그립 미끄러워서 스코어 망친 적 있어요";
+const HEADLINE_HOOK = "요즘 골퍼들 다 이거 산다던데;";
 
 function ProductCard({ p, badge, onView }) {
   return (
