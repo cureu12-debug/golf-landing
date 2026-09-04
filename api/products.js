@@ -3,13 +3,21 @@ import crypto from "crypto";
 const DOMAIN = "https://api-gateway.coupang.com";
 const SEARCH_PATH = "/v2/providers/affiliate_open_api/apis/openapi/products/search";
 
+function getDatetime() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const yy = pad(d.getUTCFullYear() % 100);
+  const MM = pad(d.getUTCMonth() + 1);
+  const dd = pad(d.getUTCDate());
+  const HH = pad(d.getUTCHours());
+  const mm = pad(d.getUTCMinutes());
+  const ss = pad(d.getUTCSeconds());
+  return `${yy}${MM}${dd}T${HH}${mm}${ss}Z`;
+}
+
 function generateHmac(method, pathWithQuery, secretKey, accessKey) {
   const [path, query = ""] = pathWithQuery.split("?");
-  const datetime =
-    new Date()
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .slice(2, 13) + "Z"; // yyMMddTHHmmssZ 형식
+  const datetime = getDatetime(); // yyMMddTHHmmssZ 형식 (UTC 기준)
   const message = datetime + method + path + query;
   const signature = crypto
     .createHmac("sha256", secretKey)
