@@ -73,6 +73,9 @@ export default async function handler(req, res) {
       imageUrl: p.productImage,
       url: p.productUrl,
       rank: p.rank ?? idx + 1,
+      category: p.categoryName,
+      isRocket: p.isRocket,
+      isFreeShipping: p.isFreeShipping,
     }));
 
     cache = { data: products, fetchedAt: now };
