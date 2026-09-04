@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight, History, Truck, Zap } from "lucide-react";
 
-const HEADLINE_HOOK = "요즘 골퍼들 다 이거 산다던데";
-
 function Badges({ p }) {
   if (!p.isRocket && !p.isFreeShipping) return null;
   return (
@@ -117,16 +115,16 @@ export default function GolfCatalogLanding() {
       <div style={{ maxWidth: 430, margin: "0 auto", background: "#F2F5EF" }}>
         <div style={{ borderBottom: "1px solid #D4DBD3", padding: "12px 18px" }}>
           <p style={{ fontSize: 11, color: "#6B7370" }}>
-            SNS에서 보고 오신 문구 — <span style={{ color: "#2F6F4E", fontWeight: 500 }}>"{HEADLINE_HOOK}"</span>
+            골프 좋아하시는 분이 클릭해주셨네요, 와주셔서 감사해요 🙂
           </p>
         </div>
 
         <div style={{ padding: "24px 18px 4px" }}>
           <h1 className="serif" style={{ fontSize: 21, lineHeight: 1.5, margin: "0 0 8px" }}>
-            지금 검색순위 상위권 골프용품, 여기 다 모았어요
+            지금 골퍼들이 가장 많이 찾는 것들, 한눈에 보고 가세요
           </h1>
           <p style={{ fontSize: 13, color: "#4A524F" }}>
-            실시간 순위 기준이라 보실 때마다 조금씩 달라질 수 있어요
+            실시간 검색순위 기준이라 지금 눌러보시는 게 제일 빨라요
           </p>
         </div>
 
