@@ -1,7 +1,23 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, History } from "lucide-react";
+import { ArrowUpRight, History, Truck, Zap } from "lucide-react";
 
-const HEADLINE_HOOK = "요즘 골퍼들 다 이거 산다던데;";
+function Badges({ p }) {
+  if (!p.isRocket && !p.isFreeShipping) return null;
+  return (
+    <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+      {p.isRocket && (
+        <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, color: "#2F6F4E", background: "#E7F0EA", padding: "3px 7px", borderRadius: 4, fontWeight: 500 }}>
+          <Zap size={10} /> 로켓배송
+        </span>
+      )}
+      {p.isFreeShipping && (
+        <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, color: "#4A524F", background: "#EEF1EF", padding: "3px 7px", borderRadius: 4, fontWeight: 500 }}>
+          <Truck size={10} /> 무료배송
+        </span>
+      )}
+    </div>
+  );
+}
 
 function ProductCard({ p, badge, onView }) {
   return (
@@ -16,6 +32,7 @@ function ProductCard({ p, badge, onView }) {
       </div>
       <div style={{ padding: 16 }}>
         <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 8, lineHeight: 1.4 }}>{p.name}</p>
+        <Badges p={p} />
         <p style={{ fontSize: 11, color: "#8A9490", marginBottom: 8 }}>쿠팡 검색 순위 {p.rank}위</p>
         <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 14 }}>
           {Number(p.price).toLocaleString()}원
@@ -48,7 +65,6 @@ function ProductCard({ p, badge, onView }) {
   );
 }
 
-// 매번 다르게 보이도록 배열을 섞는 함수 (진짜 랜덤은 아니지만 방문마다 순서가 바뀜)
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -60,7 +76,7 @@ function shuffle(arr) {
 
 export default function GolfCatalogLanding() {
   const [products, setProducts] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
   const [viewed, setViewed] = useState([]);
 
   useEffect(() => {
@@ -77,8 +93,14 @@ export default function GolfCatalogLanding() {
       .catch(() => setStatus("error"));
   }, []);
 
+  // 클릭한 상품과 같은 카테고리 상품을 목록 상단으로 끌어올리는 재정렬
   const handleView = (product) => {
     setViewed((prev) => [product, ...prev.filter((p) => p.id !== product.id)].slice(0, 4));
+    setProducts((prev) => {
+      const sameCategory = prev.filter((p) => p.category === product.category);
+      const others = prev.filter((p) => p.category !== product.category);
+      return [...sameCategory, ...others];
+    });
   };
 
   const bestProducts = [...products].sort((a, b) => a.rank - b.rank).slice(0, 3);
@@ -93,16 +115,16 @@ export default function GolfCatalogLanding() {
       <div style={{ maxWidth: 430, margin: "0 auto", background: "#F2F5EF" }}>
         <div style={{ borderBottom: "1px solid #D4DBD3", padding: "12px 18px" }}>
           <p style={{ fontSize: 11, color: "#6B7370" }}>
-            SNS에서 보고 오신 문구 — <span style={{ color: "#2F6F4E", fontWeight: 500 }}>"{HEADLINE_HOOK}"</span>
+            골프 좋아하시는 분이 클릭해주셨네요, 와주셔서 감사해요 🙂
           </p>
         </div>
 
         <div style={{ padding: "24px 18px 4px" }}>
           <h1 className="serif" style={{ fontSize: 21, lineHeight: 1.5, margin: "0 0 8px" }}>
-            그 그립 미끄러짐, 이 골프템들이 해결해드려요
+            지금 골퍼들이 가장 많이 찾는 것들, 한눈에 보고 가세요
           </h1>
           <p style={{ fontSize: 13, color: "#4A524F" }}>
-            지금 골퍼들이 많이 찾는 것들만 모아봤어요
+            실시간 검색순위 기준이라 지금 눌러보시는 게 제일 빨라요
           </p>
         </div>
 
@@ -156,7 +178,7 @@ export default function GolfCatalogLanding() {
             <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F" }}>방금 살펴보신 상품</h2>
           </div>
           {viewed.length === 0 ? (
-            <p style={{ fontSize: 12, color: "#8A9490" }}>상품을 눌러보시면 여기에 기록돼요</p>
+            <p style={{ fontSize: 12, color: "#8A9490" }}>상품을 눌러보시면 여기에 기록되고, 같은 종류의 상품이 위로 올라와요</p>
           ) : (
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {viewed.map((p) => (
