@@ -114,8 +114,11 @@ export default function GolfCatalogLanding() {
 
       <div style={{ maxWidth: 430, margin: "0 auto", background: "#F2F5EF" }}>
         <div style={{ borderBottom: "1px solid #D4DBD3", padding: "12px 18px" }}>
-          <p style={{ fontSize: 11, color: "#6B7370" }}>
+          <p style={{ fontSize: 11, color: "#6B7370", marginBottom: 4 }}>
             골프 좋아하시는 분이 클릭해주셨네요, 와주셔서 감사해요 🙂
+          </p>
+          <p style={{ fontSize: 10, color: "#8A9490" }}>
+            이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
           </p>
         </div>
 
@@ -192,7 +195,7 @@ export default function GolfCatalogLanding() {
 
         <div style={{ padding: "20px 18px 36px" }}>
           <p style={{ fontSize: 10, color: "#8A9490" }}>
-            이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
+            이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
           </p>
         </div>
       </div>
