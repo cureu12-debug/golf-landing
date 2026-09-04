@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   }
 
   const keyword = req.query.keyword || "골프용품";
-  const limit = 20;
+  const limit = 10;
   const pathWithQuery = `${SEARCH_PATH}?keyword=${encodeURIComponent(keyword)}&limit=${limit}`;
 
   try {
