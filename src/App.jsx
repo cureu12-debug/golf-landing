@@ -1,67 +1,48 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, History, Truck, Zap } from "lucide-react";
+import { History, Truck, Zap } from "lucide-react";
 
 function Badges({ p }) {
   if (!p.isRocket && !p.isFreeShipping) return null;
   return (
-    <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+    <div style={{ display: "flex", gap: 4, marginBottom: 4, flexWrap: "wrap" }}>
       {p.isRocket && (
-        <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, color: "#2F6F4E", background: "#E7F0EA", padding: "3px 7px", borderRadius: 4, fontWeight: 500 }}>
-          <Zap size={10} /> 로켓배송
+        <span style={{ display: "flex", alignItems: "center", gap: 2, fontSize: 9, color: "#2F6F4E", background: "#E7F0EA", padding: "2px 5px", borderRadius: 3, fontWeight: 500 }}>
+          <Zap size={9} /> 로켓
         </span>
       )}
       {p.isFreeShipping && (
-        <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, color: "#4A524F", background: "#EEF1EF", padding: "3px 7px", borderRadius: 4, fontWeight: 500 }}>
-          <Truck size={10} /> 무료배송
+        <span style={{ display: "flex", alignItems: "center", gap: 2, fontSize: 9, color: "#4A524F", background: "#EEF1EF", padding: "2px 5px", borderRadius: 3, fontWeight: 500 }}>
+          <Truck size={9} /> 무료배송
         </span>
       )}
     </div>
   );
 }
 
-function ProductCard({ p, badge, onView }) {
+// 이미지/이름을 누르면 바로 이동 - 별도 구매 버튼 없이 카드 전체가 링크
+function ProductTile({ p, onView }) {
   return (
-    <div style={{ border: "1px solid #D4DBD3", borderRadius: 8, background: "#fff", overflow: "hidden", marginBottom: 14 }}>
-      <div style={{ position: "relative" }}>
-        <img src={p.imageUrl} alt={p.name} style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }} />
-        {badge && (
-          <span style={{ position: "absolute", top: 10, left: 10, background: "#2F6F4E", color: "#fff", fontSize: 12, fontWeight: 700, padding: "3px 9px", borderRadius: 999 }}>
-            {badge}
+    <a
+      href={p.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => onView(p)}
+      style={{ textDecoration: "none", color: "inherit", border: "1px solid #D4DBD3", borderRadius: 8, background: "#fff", overflow: "hidden", display: "block" }}
+    >
+      <div style={{ position: "relative", aspectRatio: "1 / 1" }}>
+        <img src={p.imageUrl} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        {p.rank <= 3 && (
+          <span style={{ position: "absolute", top: 6, left: 6, background: "#2F6F4E", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999 }}>
+            베스트 {p.rank}
           </span>
         )}
       </div>
-      <div style={{ padding: 16 }}>
-        <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 8, lineHeight: 1.4 }}>{p.name}</p>
+      <div style={{ padding: 10 }}>
+        <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 6, lineHeight: 1.35, height: 32, overflow: "hidden" }}>{p.name}</p>
         <Badges p={p} />
-        <p style={{ fontSize: 11, color: "#8A9490", marginBottom: 8 }}>쿠팡 검색 순위 {p.rank}위</p>
-        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 14 }}>
-          {Number(p.price).toLocaleString()}원
-        </div>
-        <a
-          href={p.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => onView(p)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 4,
-            width: "100%",
-            padding: "11px",
-            borderRadius: 6,
-            border: "none",
-            background: "#2F6F4E",
-            color: "#fff",
-            fontSize: 13,
-            fontWeight: 500,
-            textDecoration: "none",
-          }}
-        >
-          구매하러 가기 <ArrowUpRight size={13} />
-        </a>
+        <div style={{ fontSize: 14, fontWeight: 700 }}>{Number(p.price).toLocaleString()}원</div>
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -103,8 +84,6 @@ export default function GolfCatalogLanding() {
     });
   };
 
-  const bestProducts = [...products].sort((a, b) => a.rank - b.rank).slice(0, 3);
-
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif", background: "#F2F5EF", minHeight: "100%", color: "#1B2430" }}>
       <style>{`
@@ -141,41 +120,17 @@ export default function GolfCatalogLanding() {
         )}
 
         {status === "ready" && (
-          <>
-            <div style={{ padding: "20px 18px 4px" }}>
-              <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F", marginBottom: 10 }}>지금 검색 상위권 베스트</h2>
-              <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4 }}>
-                {bestProducts.map((p, i) => (
-                  <a
-                    key={p.id}
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => handleView(p)}
-                    style={{ minWidth: 120, textDecoration: "none", color: "inherit", border: "1px solid #D4DBD3", borderRadius: 6, overflow: "hidden", background: "#fff" }}
-                  >
-                    <div style={{ position: "relative" }}>
-                      <img src={p.imageUrl} alt={p.name} style={{ width: "100%", height: 90, objectFit: "cover", display: "block" }} />
-                      <span style={{ position: "absolute", top: 6, left: 6, background: "#2F6F4E", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 999 }}>
-                        {i + 1}
-                      </span>
-                    </div>
-                    <p style={{ fontSize: 11, padding: "8px 8px 10px", lineHeight: 1.3 }}>{p.name}</p>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ padding: "20px 18px 4px" }}>
-              <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F", marginBottom: 10 }}>골프템 모음</h2>
+          <div style={{ padding: "20px 18px 4px" }}>
+            <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F", marginBottom: 10 }}>골프템 모음</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {products.map((p) => (
-                <ProductCard key={p.id} p={p} onView={handleView} />
+                <ProductTile key={p.id} p={p} onView={handleView} />
               ))}
             </div>
-          </>
+          </div>
         )}
 
-        <div style={{ padding: "8px 18px 4px" }}>
+        <div style={{ padding: "24px 18px 4px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
             <History size={13} color="#6B7370" />
             <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F" }}>방금 살펴보신 상품</h2>
