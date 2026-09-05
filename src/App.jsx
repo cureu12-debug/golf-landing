@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { History, Truck, Zap } from "lucide-react";
+import { History, Truck, Zap, Flame } from "lucide-react";
 
 function Badges({ p }) {
   if (!p.isRocket && !p.isFreeShipping) return null;
   return (
     <div style={{ display: "flex", gap: 4, marginBottom: 4, flexWrap: "wrap" }}>
       {p.isRocket && (
-        <span style={{ display: "flex", alignItems: "center", gap: 2, fontSize: 9, color: "#2F6F4E", background: "#E7F0EA", padding: "2px 5px", borderRadius: 3, fontWeight: 500 }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 2, fontSize: 9, color: "#fff", background: "#2563EB", padding: "2px 5px", borderRadius: 3, fontWeight: 700 }}>
           <Zap size={9} /> 로켓
         </span>
       )}
@@ -19,7 +19,6 @@ function Badges({ p }) {
   );
 }
 
-// 이미지/이름을 누르면 바로 이동 - 별도 구매 버튼 없이 카드 전체가 링크
 function ProductTile({ p, onView }) {
   return (
     <a
@@ -27,20 +26,21 @@ function ProductTile({ p, onView }) {
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => onView(p)}
-      style={{ textDecoration: "none", color: "inherit", border: "1px solid #D4DBD3", borderRadius: 8, background: "#fff", overflow: "hidden", display: "block" }}
+      className="tile"
+      style={{ textDecoration: "none", color: "inherit", border: "1px solid #E2E5E1", borderRadius: 10, background: "#fff", overflow: "hidden", display: "block" }}
     >
       <div style={{ position: "relative", aspectRatio: "1 / 1" }}>
         <img src={p.imageUrl} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         {p.primary && p.rank <= 3 && (
-          <span style={{ position: "absolute", top: 6, left: 6, background: "#2F6F4E", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999 }}>
-            베스트 {p.rank}
+          <span style={{ position: "absolute", top: 6, left: 6, display: "flex", alignItems: "center", gap: 2, background: "#FF3B30", color: "#fff", fontSize: 10, fontWeight: 800, padding: "3px 7px", borderRadius: 999 }}>
+            <Flame size={10} /> {p.rank}위
           </span>
         )}
       </div>
       <div style={{ padding: 10 }}>
-        <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 6, lineHeight: 1.35, height: 32, overflow: "hidden" }}>{p.name}</p>
+        <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 6, lineHeight: 1.35, height: 32, overflow: "hidden", color: "#1B2430" }}>{p.name}</p>
         <Badges p={p} />
-        <div style={{ fontSize: 14, fontWeight: 700 }}>{Number(p.price).toLocaleString()}원</div>
+        <div style={{ fontSize: 16, fontWeight: 800, color: "#E8461C" }}>{Number(p.price).toLocaleString()}<span style={{ fontSize: 12, fontWeight: 700 }}>원</span></div>
       </div>
     </a>
   );
@@ -74,7 +74,6 @@ export default function GolfCatalogLanding() {
       .catch(() => setStatus("error"));
   }, []);
 
-  // 클릭한 상품과 같은 카테고리 상품을 목록 상단으로 끌어올리는 재정렬
   const handleView = (product) => {
     setViewed((prev) => [product, ...prev.filter((p) => p.id !== product.id)].slice(0, 4));
     setProducts((prev) => {
@@ -85,14 +84,15 @@ export default function GolfCatalogLanding() {
   };
 
   return (
-    <div style={{ fontFamily: "'Noto Sans KR', sans-serif", background: "#F2F5EF", minHeight: "100%", color: "#1B2430" }}>
+    <div style={{ fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif", background: "#F5F6F4", minHeight: "100%", color: "#1B2430" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
-        .serif { font-family: 'Noto Serif KR', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap');
+        .tile { transition: transform 0.12s ease, box-shadow 0.12s ease; }
+        .tile:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
       `}</style>
 
-      <div style={{ maxWidth: 430, margin: "0 auto", background: "#F2F5EF" }}>
-        <div style={{ borderBottom: "1px solid #D4DBD3", padding: "12px 18px" }}>
+      <div style={{ maxWidth: 430, margin: "0 auto", background: "#F5F6F4" }}>
+        <div style={{ borderBottom: "1px solid #E2E5E1", padding: "12px 18px" }}>
           <p style={{ fontSize: 11, color: "#6B7370", marginBottom: 4 }}>
             골프 좋아하시는 분이 클릭해주셨네요, 와주셔서 감사해요 🙂
           </p>
@@ -101,12 +101,12 @@ export default function GolfCatalogLanding() {
           </p>
         </div>
 
-        <div style={{ padding: "24px 18px 4px" }}>
-          <h1 className="serif" style={{ fontSize: 21, lineHeight: 1.5, margin: "0 0 8px" }}>
-            지금 골퍼들이 가장 많이 찾는 것들, 한눈에 보고 가세요
+        <div style={{ padding: "22px 18px 4px" }}>
+          <h1 style={{ fontSize: 22, fontWeight: 900, lineHeight: 1.35, margin: "0 0 6px", letterSpacing: "-0.5px" }}>
+            요즘 가장 잘 나가는<br />골프템 모음 🔥
           </h1>
-          <p style={{ fontSize: 13, color: "#4A524F" }}>
-            실시간 검색순위 기준이라 지금 눌러보시는 게 제일 빨라요
+          <p style={{ fontSize: 13, color: "#4A524F", fontWeight: 500 }}>
+            지금 사람들이 제일 많이 담는 것들이에요
           </p>
         </div>
 
@@ -120,8 +120,7 @@ export default function GolfCatalogLanding() {
         )}
 
         {status === "ready" && (
-          <div style={{ padding: "20px 18px 4px" }}>
-            <h2 style={{ fontSize: 13, fontWeight: 700, color: "#4A524F", marginBottom: 10 }}>골프템 모음</h2>
+          <div style={{ padding: "18px 18px 4px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {products.map((p) => (
                 <ProductTile key={p.id} p={p} onView={handleView} />
@@ -140,7 +139,7 @@ export default function GolfCatalogLanding() {
           ) : (
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {viewed.map((p) => (
-                <div key={p.id} style={{ border: "1px solid #D4DBD3", borderRadius: 4, padding: "8px 11px", fontSize: 11, background: "#fff" }}>
+                <div key={p.id} style={{ border: "1px solid #E2E5E1", borderRadius: 4, padding: "8px 11px", fontSize: 11, background: "#fff" }}>
                   {p.name}
                 </div>
               ))}
