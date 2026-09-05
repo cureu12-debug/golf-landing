@@ -31,7 +31,7 @@ function ProductTile({ p, onView }) {
     >
       <div style={{ position: "relative", aspectRatio: "1 / 1" }}>
         <img src={p.imageUrl} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-        {p.rank <= 3 && (
+        {p.primary && p.rank <= 3 && (
           <span style={{ position: "absolute", top: 6, left: 6, background: "#2F6F4E", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999 }}>
             베스트 {p.rank}
           </span>
